@@ -342,39 +342,3 @@ for i = 1:size(pairs,1)
     writetable(pairTable, xlsxpath);
     fprintf('Saved pair: %s (%d rows)\n', fname, height(pairTable));
 end
-
-%% Training and Testing Split
-% Load your final table (after running your previous pipeline)
-load('AllLeadTimes_preOSA_preNormal_Normal_emgecgrmoved_Features_removedTHD.mat','pairTable'); % Or use readtable() for CSV
-
-% Find indices for each class
-osa_idx = find(strcmp(pairTable.EventType, 'preOSA_120_150'));
-normal_idx = find(strcmp(pairTable.EventType, 'Normal'));
-
-% Define split ratio
-train_ratio = 0.8; % 70% training, 30% testing
-
-% Randomize (but reproducibly)
-rng(42); % for reproducibility
-osa_idx = osa_idx(randperm(length(osa_idx)));
-normal_idx = normal_idx(randperm(length(normal_idx)));
-
-% Split indices
-n_osa_train = round(train_ratio * length(osa_idx));
-n_normal_train = round(train_ratio * length(normal_idx));
-
-train_idx = [osa_idx(1:n_osa_train); normal_idx(1:n_normal_train)];
-test_idx  = [osa_idx(n_osa_train+1:end); normal_idx(n_normal_train+1:end)];
-
-% Create train/test tables
-trainTable = pairTable(train_idx, :);
-testTable  = pairTable(test_idx, :);
-
-% Save them for future ML/modeling
-writetable(trainTable, 'Train_Features_preOSA_120_150_Normal_emgecgrmoved_Features.xlsx');
-writetable(testTable,  'Test_Features_preOSA_120_150_Normal_emgecgrmoved_Features.xlsx');
-save('Train_Features_preOSA_120_150_Normal_emgecgrmoved_Features.mat', 'trainTable');
-save('Test_Features_preOSA_120_150_Normal_emgecgrmoved_Features.mat',  'testTable');
-
-fprintf('Stratified train/test split complete.\nTrain: %d rows, Test: %d rows\n', ...
-    height(trainTable), height(testTable));
