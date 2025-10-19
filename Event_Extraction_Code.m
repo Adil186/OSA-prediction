@@ -71,7 +71,7 @@ for subj_idx = 1755:length(edf_files)
 
     % DWT (0–1 Hz, nLevel=8 for fs_emg=256)
     wavename = 'db4';
-    nLevel = 8;
+    nLevel = 7;
     [C_emg, L_emg] = wavedec(emg_ecg_rmoved, nLevel, wavename);
     A_emg = wrcoef('a', C_emg, L_emg, wavename, nLevel);
 
@@ -716,4 +716,5 @@ function maj_stage = majority_stage_interval(sleep_stages, t_start, t_end)
             maj_stage = label;
         end
     end
+
 end
