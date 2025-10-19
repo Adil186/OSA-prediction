@@ -256,7 +256,7 @@ end
 % 1) Choose wavelet and levels
 wavename = 'db4';
 maxL     = wmaxlev(length(emg_raw), wavename);
-nLevel   = min(8, maxL);   % e.g. 5 levels
+nLevel   = min(7, maxL);   % e.g. 5 levels
 
 %% 2) Perform DWT on EMG
 [C_emg,L_emg] = wavedec(emg_raw, nLevel, wavename);
@@ -538,5 +538,6 @@ end
 %         saveas(fig5, 'Frequency_Spectrum.png');
 %     end
 % end
+
 
 end
